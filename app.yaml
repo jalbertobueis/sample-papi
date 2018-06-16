@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: sample-papi
+  labels:
+    app: sample-papi
+    tier: frontend
+#   https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/
+spec:
+  replicas: 15
+  template:
+    metadata:
+      labels:
+        app: sample-papi
+        tier: frontend
+    spec:
+      containers:
+      - name: sample-papi
+        image: gcr.io/carrefour-ecommerce/sample-papi:latest
+        command: ["app"]
+        # This setting makes nodes pull the docker image every time before
+        # starting the pod. This is useful when debugging, but should be turned
+        # off in production.
+        imagePullPolicy: Always
+        # The bookshelf process listens on port 8080 for web traffic by default.
+        ports:
+        - name: http-server
+          containerPort: 6060
